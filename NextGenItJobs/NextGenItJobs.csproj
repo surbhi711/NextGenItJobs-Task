@@ -69,9 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Admin\ContactList.aspx" />
     <Content Include="Admin\Dashboard.aspx" />
     <Content Include="Admin\JobList.aspx" />
     <Content Include="Admin\NewJob.aspx" />
+    <Content Include="Admin\UserList.aspx" />
+    <Content Include="Admin\ViewResume.aspx" />
     <Content Include="App_Data\NextGenItJobs.mdf" />
     <Content Include="App_Data\NextGenItJobs_log.ldf">
       <DependentUpon>NextGenItJobs.mdf</DependentUpon>
@@ -130,6 +133,7 @@
     <Content Include="assetsa\images\dashboard\img_2.jpg" />
     <Content Include="assetsa\images\dashboard\img_3.jpg" />
     <Content Include="assetsa\images\dashboard\img_4.jpg" />
+    <Content Include="assetsa\images\delete.png" />
     <Content Include="assetsa\images\demo\boxed-layout.png" />
     <Content Include="assetsa\images\demo\calendar.png" />
     <Content Include="assetsa\images\demo\compact-menu.png" />
@@ -146,6 +150,7 @@
     <Content Include="assetsa\images\demo\toggle-overlay-menu.png" />
     <Content Include="assetsa\images\demo\vertical-dark.png" />
     <Content Include="assetsa\images\demo\vertical-default.png" />
+    <Content Include="assetsa\images\edit.png" />
     <Content Include="assetsa\images\email\fb.png" />
     <Content Include="assetsa\images\email\mail-image.jpg" />
     <Content Include="assetsa\images\email\medium.png" />
@@ -499,6 +504,9 @@
     <Content Include="assets\img\team\3.png" />
     <Content Include="assets\img\testmonial\1.png" />
     <Content Include="assets\img\testmonial\testimonial-founder.png" />
+    <Content Include="assets\img\user.png" />
+    <Content Include="assets\img\user1.png" />
+    <Content Include="assets\img\user2.png" />
     <Content Include="assets\js\animated.headline.js" />
     <Content Include="assets\js\bootstrap.min.js" />
     <Content Include="assets\js\contact.js" />
@@ -523,13 +531,16 @@
     <Content Include="assets\js\vendor\modernizr-3.5.0.min.js" />
     <Content Include="assets\js\wow.min.js" />
     <Content Include="Global.asax" />
+    <Content Include="Images\No_image.jpg" />
     <Content Include="User\About.aspx" />
     <Content Include="User\Contact.aspx" />
     <Content Include="User\Default.aspx" />
     <Content Include="User\JobDetails.aspx" />
     <Content Include="User\JobListing.aspx" />
     <Content Include="User\Login.aspx" />
+    <Content Include="User\Profile.aspx" />
     <Content Include="User\Register.aspx" />
+    <Content Include="User\ResumeBuild.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -539,6 +550,13 @@
     </Compile>
     <Compile Include="Admin\AdminMaster.Master.designer.cs">
       <DependentUpon>AdminMaster.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ContactList.aspx.cs">
+      <DependentUpon>ContactList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ContactList.aspx.designer.cs">
+      <DependentUpon>ContactList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Admin\Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
@@ -560,6 +578,20 @@
     </Compile>
     <Compile Include="Admin\NewJob.aspx.designer.cs">
       <DependentUpon>NewJob.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\UserList.aspx.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\UserList.aspx.designer.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ViewResume.aspx.cs">
+      <DependentUpon>ViewResume.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Admin\ViewResume.aspx.designer.cs">
+      <DependentUpon>ViewResume.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -607,12 +639,26 @@
     <Compile Include="User\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="User\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
     <Compile Include="User\Register.aspx.cs">
       <DependentUpon>Register.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="User\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="User\ResumeBuild.aspx.cs">
+      <DependentUpon>ResumeBuild.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User\ResumeBuild.aspx.designer.cs">
+      <DependentUpon>ResumeBuild.aspx</DependentUpon>
     </Compile>
     <Compile Include="User\UserMaster.Master.cs">
       <DependentUpon>UserMaster.Master</DependentUpon>
@@ -621,6 +667,7 @@
     <Compile Include="User\UserMaster.Master.designer.cs">
       <DependentUpon>UserMaster.Master</DependentUpon>
     </Compile>
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\fonts\fa-brands-400.eot" />
@@ -712,8 +759,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="Models\" />
+    <Folder Include="Resumes\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

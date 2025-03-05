@@ -7,10 +7,18 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <div class="text-center mb-3">
+                <%--<div class="text-center mb-3">
                     <asp:Label ID="lblMsg" runat="server"></asp:Label>
+                </div>--%>
+                <div class="btn-toolbar justify-content-between mb-3">
+                    <div class="btn-group">
+                        <asp:Label ID="lblMsg" runat="server"></asp:Label>
+                    </div>
+                    <div class="input-group h-25">
+                        <asp:HyperLink ID="linkBack" runat="server" NavigateUrl="~/Admin/JobList.aspx" CssClass="btn btn-secondary" Visible="false">< Back</asp:HyperLink>
+                    </div>
                 </div>
-                <h4 class="card-title mb-4">Add New Job</h4>
+                <h4 class="card-title mb-4"><% Response.Write(Session["title"]); %></h4>
                 <div class="form-sample">
                     <%--<form class="form-sample">--%>
                     <%--<p class="card-description">Personal info </p>--%>
@@ -166,7 +174,7 @@
                     <%--</form>--%>
                     <div class="row">
                         <div class="col-md-3">
-                            <asp:Button ID="btnAdd" runat="server" CssClass="btn btn-gradient-primary" BackColor="#7200cf" Text="Add Job" OnClick="btnAdd_Click"/>
+                            <asp:Button ID="btnAdd" runat="server" CssClass="btn btn-gradient-primary" BackColor="#7200cf" Text="Add Job" OnClick="btnAdd_Click" />
                         </div>
                     </div>
                 </div>

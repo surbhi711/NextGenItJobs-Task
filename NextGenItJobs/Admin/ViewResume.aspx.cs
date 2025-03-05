@@ -10,51 +10,45 @@ using System.Drawing;
 
 namespace NextGenItJobs.Admin
 {
-    public partial class JobList : System.Web.UI.Page
+    public partial class ViewResume : System.Web.UI.Page
     {
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Project\NextGenItJobs\NextGenItJobs\App_Data\NextGenItJobs.mdf;Integrated Security=True");
         SqlCommand cmd;
         DataTable dt;
 
-        protected void Page_PreRender(object sender, EventArgs e)
+        protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["admin"] == null)
             {
                 Response.Redirect("../User/Login.aspx");
             }
-            if(!IsPostBack)
+            if (!IsPostBack)
             {
-                ShowJob();
+                ShowAppliedJob();
             }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            ShowJob();
-        }
-
-        private void ShowJob()
+        private void ShowAppliedJob()
         {
             string query = string.Empty;
             con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Project\NextGenItJobs\NextGenItJobs\App_Data\NextGenItJobs.mdf;Integrated Security=True");
-            query = @"Select Row_Number() over(Order by (Select 1)) as [Sr.No], JobId, Title, NoOfPost, Qualification, Experience, LastDateToApply, CompanyName, Country, State, CreateDate from Jobs";
+            query = @"Select Row_Number() over(Order by(Select 1)) as [Sr.No],aj.AppliedJobId,j.CompanyName,aj.JobId,j.Title,u.Mobile,
+                        u.Name,u.Email,u.Resume from AppliedJobs aj
+                        inner join [User] u on aj.UserId = u.UserId
+                        inner join Jobs j on aj.JobId = j.JobId";
 
             cmd = new SqlCommand(query, con);
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             dt = new DataTable();
             sda.Fill(dt);
             GridView1.DataSource = dt;
-            GridView1.DataBind();         
-            if(Request.QueryString["id"] != null)
-            {
-                LinkBack.Visible = true;
-            }
+            GridView1.DataBind();
         }
 
         protected void GridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             GridView1.PageIndex = e.NewPageIndex;
-            ShowJob();
+            ShowAppliedJob();
         }
 
         protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -62,15 +56,15 @@ namespace NextGenItJobs.Admin
             try
             {
                 GridViewRow row = GridView1.Rows[e.RowIndex];
-                int jobId = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
+                int applliedJobId = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values[0]);
                 con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\Project\NextGenItJobs\NextGenItJobs\App_Data\NextGenItJobs.mdf;Integrated Security=True");
-                cmd = new SqlCommand("DELETE FROM Jobs WHERE JobId = @id",con);
-                cmd.Parameters.AddWithValue("@id", jobId);
+                cmd = new SqlCommand("DELETE FROM AppliedJobs WHERE AppliedJobId = @id", con);
+                cmd.Parameters.AddWithValue("@id", applliedJobId);
                 con.Open();
                 int r = cmd.ExecuteNonQuery();
-                if(r>0)
+                if (r > 0)
                 {
-                    lblMsg.Text = "Job Deleted Sucessfully!";
+                    lblMsg.Text = "Resume Deleted Sucessfully!";
                     lblMsg.CssClass = "alert alert-success";
                 }
                 else
@@ -79,9 +73,9 @@ namespace NextGenItJobs.Admin
                     lblMsg.CssClass = "alert alert-danger";
                 }                
                 GridView1.EditIndex = -1;
-                ShowJob();
+                ShowAppliedJob();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {                
                 Response.Write("<script>alert('" + ex.Message + "');</script>");
             }
@@ -91,26 +85,25 @@ namespace NextGenItJobs.Admin
             }
         }
 
-        protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            if(e.CommandName== "EditJob")
-            {
-                Response.Redirect("NewJob.aspx?id=" + e.CommandArgument.ToString());
-            }
-        }
-
         protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if(e.Row.RowType == DataControlRowType.DataRow)
+            e.Row.Attributes["onclick"] = Page.ClientScript.GetPostBackClientHyperlink(GridView1, "Select$" + e.Row.RowIndex);
+            e.Row.ToolTip = "Click to View Job Details";
+        }
+
+        protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach(GridViewRow row in GridView1.Rows)
             {
-                e.Row.ID = e.Row.RowIndex.ToString();
-                if(Request.QueryString["id"] != null)
+                if(row.RowIndex == GridView1.SelectedIndex)
                 {
-                    int jobId = Convert.ToInt32(GridView1.DataKeys[e.Row.RowIndex].Values[0]);
-                    if(jobId == Convert.ToInt32(Request.QueryString["id"]))
-                    {
-                        e.Row.BackColor = ColorTranslator.FromHtml("#A1DCF2");
-                    }
+                    HiddenField jobId = (HiddenField)row.FindControl("hdnJobId");
+                    Response.Redirect("JobList.aspx?id="+jobId.Value);
+                }
+                else
+                {
+                    row.BackColor = ColorTranslator.FromHtml("#FFFFFF");
+                    row.ToolTip = "Click To Select this Row";
                 }
             }
         }
